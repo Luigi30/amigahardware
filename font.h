@@ -16,6 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>
 ************************************************************************/
 
+#include "hello.h"
+
 /* the values in this array are a 8x8 bitmap font for ascii characters */
 static uint64_t __chip FONT_8X8[128] = {
 	0x7E7E7E7E7E7E0000,	/* NUL */
@@ -158,9 +160,51 @@ void F_DrawGlyph(UBYTE *bitmap, int x, int y, uint64_t *font, int height, int wi
 	}
 }
 
-void F_PutString(UBYTE *bitmap, int x, int y, uint64_t *font, int height, int width, char *str){
+void F_PutString(int color, int x, int y, uint64_t *font, int height, int width, char *str){
+	int bp1 = false;
+	int bp2 = false;
+	int bp3 = false;
+	int bp4 = false;
+	int bp5 = false;
+	
+	//Figure out which combination of bitplanes we need to get this color.
+	if((color & 0x01) == 0x01)
+		bp1 = true;
+	if((color & 0x02) == 0x02)
+		bp2 = true;
+	if((color & 0x04) == 0x04)
+		bp3 = true;
+	if((color & 0x08) == 0x08)
+		bp4 = true;
+	if((color & 0x10) == 0x10)
+		bp5 = true;	
+	
 	for(int i=0;i<strlen(str);i++){
 		int newX = x + (width * i);
-		F_DrawGlyph(bitmap, newX, y, font, height, width, str[i]);
+		
+		if(bp1)
+			F_DrawGlyph(Bitplane1, newX, y, font, height, width, str[i]);
+		else
+			F_DrawGlyph(Bitplane1, newX, y, font, height, width, 0x20);
+		
+		if(bp2)
+			F_DrawGlyph(Bitplane2, newX, y, font, height, width, str[i]);
+		else
+			F_DrawGlyph(Bitplane2, newX, y, font, height, width, 0x20);
+		
+		if(bp3)
+			F_DrawGlyph(Bitplane3, newX, y, font, height, width, str[i]);
+		else
+			F_DrawGlyph(Bitplane3, newX, y, font, height, width, 0x20);
+		
+		if(bp4)
+			F_DrawGlyph(Bitplane4, newX, y, font, height, width, str[i]);
+		else
+			F_DrawGlyph(Bitplane4, newX, y, font, height, width, 0x20);
+		
+		if(bp5)
+			F_DrawGlyph(Bitplane5, newX, y, font, height, width, str[i]);
+		else
+			F_DrawGlyph(Bitplane5, newX, y, font, height, width, 0x20);
 	}	
 }
