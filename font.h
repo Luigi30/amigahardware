@@ -160,7 +160,7 @@ void F_DrawGlyph(UBYTE *bitmap, int x, int y, uint64_t *font, int height, int wi
 	}
 }
 
-void F_PutString(int color, int x, int y, uint64_t *font, int height, int width, char *str){
+void F_PutString(PLANEPTR *bitplanes, int color, int x, int y, uint64_t *font, int height, int width, char *str){
 	int bp1 = false;
 	int bp2 = false;
 	int bp3 = false;
@@ -183,28 +183,28 @@ void F_PutString(int color, int x, int y, uint64_t *font, int height, int width,
 		int newX = x + (width * i);
 		
 		if(bp1)
-			F_DrawGlyph(Bitplane1, newX, y, font, height, width, str[i]);
+			F_DrawGlyph(bitplanes[0], newX, y, font, height, width, str[i]);
 		else
-			F_DrawGlyph(Bitplane1, newX, y, font, height, width, 0x20);
+			F_DrawGlyph(bitplanes[0], newX, y, font, height, width, 0x20);
 		
 		if(bp2)
-			F_DrawGlyph(Bitplane2, newX, y, font, height, width, str[i]);
+			F_DrawGlyph(bitplanes[1], newX, y, font, height, width, str[i]);
 		else
-			F_DrawGlyph(Bitplane2, newX, y, font, height, width, 0x20);
+			F_DrawGlyph(bitplanes[1], newX, y, font, height, width, 0x20);
 		
 		if(bp3)
-			F_DrawGlyph(Bitplane3, newX, y, font, height, width, str[i]);
+			F_DrawGlyph(bitplanes[2], newX, y, font, height, width, str[i]);
 		else
-			F_DrawGlyph(Bitplane3, newX, y, font, height, width, 0x20);
+			F_DrawGlyph(bitplanes[2], newX, y, font, height, width, 0x20);
 		
 		if(bp4)
-			F_DrawGlyph(Bitplane4, newX, y, font, height, width, str[i]);
+			F_DrawGlyph(bitplanes[3], newX, y, font, height, width, str[i]);
 		else
-			F_DrawGlyph(Bitplane4, newX, y, font, height, width, 0x20);
+			F_DrawGlyph(bitplanes[3], newX, y, font, height, width, 0x20);
 		
 		if(bp5)
-			F_DrawGlyph(Bitplane5, newX, y, font, height, width, str[i]);
+			F_DrawGlyph(bitplanes[4], newX, y, font, height, width, str[i]);
 		else
-			F_DrawGlyph(Bitplane5, newX, y, font, height, width, 0x20);
+			F_DrawGlyph(bitplanes[4], newX, y, font, height, width, 0x20);
 	}	
 }

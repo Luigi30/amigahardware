@@ -1,0 +1,103 @@
+	XDEF _TILES_bitplane1
+	XDEF _TILES_bitplane2
+	XDEF _TILES_bitplane3
+	XDEF _TILES_bitplane4
+
+	SECTION data,DATA_C
+
+	cnop 0,4
+_TILES_bitplane1:
+	dc.l	$ffffffff,$0000ffff,$8001ffff,$0000ffff,$9ff9ffff,$0000ffff
+	dc.l	$aff5ffff,$0000ffff,$b7edffff,$0000ffff,$bbddffff,$0000ffff
+	dc.l	$bdbdffff,$0000ffff,$be7dffff,$0000ffff,$be7dffff,$0000ffff
+	dc.l	$bdbdffff,$0000ffff,$bbddffff,$0000ffff,$b7edffff,$0000ffff
+	dc.l	$aff5ffff,$0000ffff,$9ff9ffff,$0000ffff,$8001ffff,$0000ffff
+	dc.l	$ffffffff,$0000ffff,$0000ffff,$00000000,$0000ffff,$00000000
+	dc.l	$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff,$00000000
+	dc.l	$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff,$00000000
+	dc.l	$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff,$00000000
+	dc.l	$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff,$00000000
+	dc.l	$0000ffff,$00000000,$0000ffff,$00000000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000,$ffff0000
+	dc.l	$ffff0000,$ffff0000
+	
+_TILES_bitplane2:
+	dc.l	$ffff0000,$ffffffff,$80010000,$ffffffff,$9ff90000,$ffffffff
+	dc.l	$aff50000,$ffffffff,$b7ed0000,$ffffffff,$bbdd0000,$ffffffff
+	dc.l	$bdbd0000,$ffffffff,$be7d0000,$ffffffff,$be7d0000,$ffffffff
+	dc.l	$bdbd0000,$ffffffff,$bbdd0000,$ffffffff,$b7ed0000,$ffffffff
+	dc.l	$aff50000,$ffffffff,$9ff90000,$ffffffff,$80010000,$ffffffff
+	dc.l	$ffff0000,$ffffffff,$00000000,$ffff0000,$00000000,$ffff0000
+	dc.l	$00000000,$ffff0000,$00000000,$ffff0000,$00000000,$ffff0000
+	dc.l	$00000000,$ffff0000,$00000000,$ffff0000,$00000000,$ffff0000
+	dc.l	$00000000,$ffff0000,$00000000,$ffff0000,$00000000,$ffff0000
+	dc.l	$00000000,$ffff0000,$00000000,$ffff0000,$00000000,$ffff0000
+	dc.l	$00000000,$ffff0000,$00000000,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000,$0000ffff,$ffff0000,$0000ffff,$ffff0000
+	dc.l	$0000ffff,$ffff0000
+	
+_TILES_bitplane3:
+	dc.l	$ffff0000,$00000000,$80010000,$00000000,$9ff90000,$00000000
+	dc.l	$aff50000,$00000000,$b7ed0000,$00000000,$bbdd0000,$00000000
+	dc.l	$bdbd0000,$00000000,$be7d0000,$00000000,$be7d0000,$00000000
+	dc.l	$bdbd0000,$00000000,$bbdd0000,$00000000,$b7ed0000,$00000000
+	dc.l	$aff50000,$00000000,$9ff90000,$00000000,$80010000,$00000000
+	dc.l	$ffff0000,$00000000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000
+	
+_TILES_bitplane4:
+	dc.l	$00000000,$00000000,$7ffe0000,$00000000,$60060000,$00000000
+	dc.l	$500a0000,$00000000,$48120000,$00000000,$44220000,$00000000
+	dc.l	$42420000,$00000000,$41820000,$00000000,$41820000,$00000000
+	dc.l	$42420000,$00000000,$44220000,$00000000,$48120000,$00000000
+	dc.l	$500a0000,$00000000,$60060000,$00000000,$7ffe0000,$00000000
+	dc.l	$00000000,$00000000,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$00000000,$0000ffff
+	dc.l	$00000000,$0000ffff,$00000000,$0000ffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff,$ffffffff
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000,$ffffffff,$ffff0000,$ffffffff,$ffff0000
+	dc.l	$ffffffff,$ffff0000

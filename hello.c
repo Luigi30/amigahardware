@@ -1,25 +1,12 @@
 #include "hello.h"
+
 #include "colormap.h"
 #include "font.h"
 
-#define WIDTH 320
-#define HEIGHT 200
-#define DEPTH 5
-
 struct GfxBase *GraphicsBase;
 
-/* Begin hardware */
-struct Custom *Hardware;
-struct CIA *PortA;
-struct CIA *PortB;
-
-UWORD SystemInts;
-UWORD SystemDMA;
-
-UBYTE *ICRA=(UBYTE *)0xbfed01;
-/* End hardware */
-
-struct GfxBase *GraphicsBase;
+int spriteX = 160;
+int spriteY = 100;
 
 void AssumeDirectControl(){
 	Forbid(); //We have exclusive control.
@@ -60,6 +47,27 @@ void LoadPalette(UWORD palette[], int entries){
 		Hardware->color[i] = palette[i];
 }
 
+void I_CheckJoystick(struct Bob_Sprite *bob){
+	//check joystick
+	UWORD input = Hardware->joy1dat; //right port is joystick
+	if(((input & 0x0002) == 0x0002) ^ ((input & 0x0001) == 0x0001))
+	{
+		bob->position_y++;
+	}
+	else if(((input & 0x0200) == 0x0200) ^ ((input & 0x0100) == 0x0100))
+	{
+		bob->position_y--;
+	}
+	else if(input & 0x0002)
+	{
+		bob->position_x++;
+	}
+	else if(input & 0x0200)
+	{
+		bob->position_x--;
+	}
+}
+
 int WaitForLMB(){
 	return (PortA->ciapra & 0x40) != 0x40;
 }
@@ -75,7 +83,7 @@ UWORD __chip copperList[] = {
 	C_BPL4PTL, 	0x0000,		/* BPL4PTL - bitplane pointer */
 	C_BPL5PTH, 	0x0000,		/* BPL5PTH - bitplane pointer */
 	C_BPL5PTL, 	0x0000,		/* BPL5PTL - bitplane pointer */	
-	C_BPLCON0,	0x7200,		/* 5 bitplanes, enable colorburst */
+	C_BPLCON0,	0x0200,		/* no bitplanes, enable colorburst */
 	C_BPLCON1,	0x0000,		/* no offset */
 	C_BPL1MOD,	0x0000,		/* no modulo */
 	C_BPL2MOD,	0x0000,
@@ -90,130 +98,90 @@ UWORD __chip copperList[] = {
 
 void SetupBitplanes(){
 	//Allocate bitplanes
-	Bitplane1 = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	Bitplane2 = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	Bitplane3 = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	Bitplane4 = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	Bitplane5 = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[0] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[1] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[2] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[3] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[4] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
 	
-	copperList[1] = HIWORD((ULONG)Bitplane1);
-	copperList[3] = LOWORD((ULONG)Bitplane1);
+	CopperPtr_Bitplane1 = BPScreen1[0];
+	CopperPtr_Bitplane2 = BPScreen1[1];
+	CopperPtr_Bitplane3 = BPScreen1[2];
+	CopperPtr_Bitplane4 = BPScreen1[3];
+	CopperPtr_Bitplane5 = BPScreen1[4];
 	
-	copperList[5] = HIWORD((ULONG)Bitplane2);
-	copperList[7] = LOWORD((ULONG)Bitplane2);
-	
-	copperList[9] = HIWORD((ULONG)Bitplane3);
-	copperList[11] = LOWORD((ULONG)Bitplane3);
-	
-	copperList[13] = HIWORD((ULONG)Bitplane4);
-	copperList[15] = LOWORD((ULONG)Bitplane4);
-	
-	copperList[17] = HIWORD((ULONG)Bitplane5);
-	copperList[19] = LOWORD((ULONG)Bitplane5);
-	
-	printf("Bitplane1 is at %p.\n", (APTR)Bitplane1);
-	printf("Bitplane2 is at %p.\n", (APTR)Bitplane2);
-	printf("Bitplane3 is at %p.\n", (APTR)Bitplane3);
-	printf("Bitplane4 is at %p.\n", (APTR)Bitplane4);
-	printf("Bitplane5 is at %p.\n", (APTR)Bitplane5);
+	printf("Screen1_Bitplane0 is at %p.\n", (APTR)BPScreen1[0]);
+	printf("Screen1_Bitplane1 is at %p.\n", (APTR)BPScreen1[1]);
+	printf("Screen1_Bitplane2 is at %p.\n", (APTR)BPScreen1[2]);
+	printf("Screen1_Bitplane3 is at %p.\n", (APTR)BPScreen1[3]);
+	printf("Screen1_Bitplane4 is at %p.\n", (APTR)BPScreen1[4]);
 }
 
+int scrollXOffset = 0;
+int scrollYOffset = 0;
 void FrameLoop(){
 	int done = false;
 	
 	int framecounter = 0;
 	int color = 0;
 	
+	copperList[21] = (UWORD)0x7200; //enable the 5 bitplane display
+	
 	while(!done){
-		WFRAME();
+		//S_SendString("FrameLoop(): New frame\r\n");
+		
+		WFRAME(); //we're out of the drawing area
 		framecounter++;
 		
+		//scrollYOffset++;
+		//if(scrollYOffset == 16){
+		//	scrollYOffset = 0;
+		//}
+		
+		CopperPtr_Bitplane1 = BPScreen1[0] + (scrollYOffset * 40);
+		CopperPtr_Bitplane2 = BPScreen1[1] + (scrollYOffset * 40);
+		CopperPtr_Bitplane3 = BPScreen1[2] + (scrollYOffset * 40);
+		CopperPtr_Bitplane4 = BPScreen1[3] + (scrollYOffset * 40);
+		CopperPtr_Bitplane5 = BPScreen1[4] + (scrollYOffset * 40);
+		
+		//Update the copper bitplane pointers
+		copperList[1] 	= HIWORD((ULONG)CopperPtr_Bitplane1);
+		copperList[3] 	= LOWORD((ULONG)CopperPtr_Bitplane1);
+		
+		copperList[5] 	= HIWORD((ULONG)CopperPtr_Bitplane2);
+		copperList[7] 	= LOWORD((ULONG)CopperPtr_Bitplane2);
+		
+		copperList[9] 	= HIWORD((ULONG)CopperPtr_Bitplane3);
+		copperList[11] 	= LOWORD((ULONG)CopperPtr_Bitplane3);
+		
+		copperList[13] 	= HIWORD((ULONG)CopperPtr_Bitplane4);
+		copperList[15] 	= LOWORD((ULONG)CopperPtr_Bitplane4);
+		
+		copperList[17] 	= HIWORD((ULONG)CopperPtr_Bitplane5);
+		copperList[19] 	= LOWORD((ULONG)CopperPtr_Bitplane5);
+		
+		B_PlaceBob(BPScreen1, ship);
+		
+		I_CheckJoystick(ship); //update ship's position based on joystick
+		
 		if(framecounter == 60){
-			color++;
-			F_PutString(color % 32, 40, 8, FONT_8X8, 8, 8, "Assuming direct control...");			
+			//F_PutString(BPScreen1, color % 32, 40, 8, FONT_8X8, 8, 8, "Assuming direct control...");
+			//color++;			
 			framecounter = 0;
 		}
 		
 		if(WaitForLMB()){
 			done = true;
 		}
+		
 	}
 	
 }
 
-void B_ClearBitplane(PLANEPTR bitplane){
-	int bltX = 0;
-	int bltY = 0;
-	int bltOffset = 30 * WIDTH/8 + bltX/8;
-	
-	int pictureW = WIDTH;
-	int pictureH = HEIGHT;
-	
-	int bltH = pictureH;
-	int bltW = pictureW/16;
-	UWORD bltSkip = (WIDTH-pictureW)/8;
-	
-	//Clear a 320x200 rectangle.
-	Hardware->dmacon  = 0x8040; //enable blitter DMA
-	BlitWait();
-	//					0xAMOOB000
-	//Hardware->bltcon0 = 0x09F0; //straight copy
-	Hardware->bltcon0 = 0x0100; //no source = clear memory
-	Hardware->bltcon1 = 0x0000;
-	//Hardware->bltapt  = (APTR)FONT_8X8;
-	Hardware->bltdpt  = bitplane;
-	//Hardware->bltamod = bltSkip;
-	Hardware->bltdmod = bltSkip;
-	Hardware->bltsize = (UWORD)(bltH*64 + bltW);
-}
-
-void B_BlitSpriteShip(int x, int y) {
-	UWORD shift = (x % 16) << 12;
-	UWORD firstwordmask = 0xFFFF >> shift;
-	UWORD lastwordmask = 0xFFFF << (16-shift);
-	
-	int spriteHeight = 32;
-	int spriteWidth = 32;
-	
-	int bltH = spriteHeight;
-	int bltW = spriteWidth/16;
-	
-	//Increase blit size by 1 word to account for shifts
-	UWORD sourceSkip = (64-spriteWidth)/8 - 1;
-	UWORD destinationSkip = (WIDTH/8) - bltW*2 - 1;	
-	UWORD blitsize = bltH*64 + bltW +1;
-	
-	Hardware->dmacon 	= 0x8040; //make sure blit DMA is enabled
-	BlitWait(); //wait for the blitter to become available
-	
-	Hardware->bltcon0	= 0x09F0 | shift; //straight copy A to D
-	Hardware->bltcon1	= 0x0000 | shift; //shifting the B source
-	
-	Hardware->bltadat 	= 0x0000; //preload with 0x0000;
-	Hardware->bltafwm	= firstwordmask;
-	Hardware->bltalwm	= lastwordmask;
-	
-	Hardware->bltapt	= (APTR)SPRITE_ship;
-	Hardware->bltdpt	= (APTR)(Bitplane1 + (y * (WIDTH/16)) + x/8);
-	
-	Hardware->bltamod	= (UWORD)sourceSkip; //32x32 image plus 1 word = 48x32 output from a 32x32 source
-	Hardware->bltdmod	= (UWORD)destinationSkip; //blitting 48x32 onto a 320x200 bitplane
-	Hardware->bltsize	= blitsize;
-}
-
-void S_SendByte(UBYTE byte){
-	Hardware->serdat = 0x0200 | byte;
-}
-
-int main(){
+int main(){	
 	GraphicsBase=(struct GfxBase *)OpenLibrary("graphics.library",0);
 	
-	//Make the custom hardware structs
-	Hardware= (struct Custom *)0xdff000;
-	PortA 	= (struct CIA *)0xbfe001;
-	PortB 	= (struct CIA *)0xbfe000;
-	
-	printf("SPRITE_ship is at %p.\n", SPRITE_ship);
+	//printf("SPRITE_ship is at %p.\n", SPRITE_ship);
 	printf("%x\n", (UWORD)(0xFFFF >> 15));
 	printf("%x\n", (UWORD)(0xFFFF << 15));
 	
@@ -228,30 +196,56 @@ int main(){
 	Hardware->dmacon 	= 0x87C0; //enable DMA
 	Hardware->color[1]	= 0xFFF; //override color1 to white since we have 1bpp graphics
 	
-	B_ClearBitplane(Bitplane1);
-	B_ClearBitplane(Bitplane2);
-	B_ClearBitplane(Bitplane3);
-	B_ClearBitplane(Bitplane4);
-	B_ClearBitplane(Bitplane5);
+	B_ClearBitplane(BPScreen1[0], WIDTH, HEIGHT);
+	B_ClearBitplane(BPScreen1[1], WIDTH, HEIGHT);
+	B_ClearBitplane(BPScreen1[2], WIDTH, HEIGHT);
+	B_ClearBitplane(BPScreen1[3], WIDTH, HEIGHT);
+	B_ClearBitplane(BPScreen1[4], WIDTH, HEIGHT);
 	BlitWait();
 	
 	//Blit a tile from SPRITE_ship!
-	B_BlitSpriteShip(0, 0);
-	B_BlitSpriteShip(8, 32);
-	B_BlitSpriteShip(16, 64);
-	B_BlitSpriteShip(24, 96);
+	ship = B_AllocateBobSprite();
+	ship->position_x = spriteX;
+	ship->position_y = spriteY;
+	ship->width = 32;
+	ship->height = 32;
+	ship->bitplanes = 5;
+	ship->graphics[0] = SPRITE_ship;
+	ship->graphics[1] = SPRITE_ship;
+	ship->graphics[2] = SPRITE_ship;
+	ship->graphics[3] = SPRITE_ship;
+	ship->graphics[4] = SPRITE_ship;
+	//B_PlaceBob(BPScreen1, ship);
+	
+	//Create the tiles in the background.
+	for(int y=0;y<14;y++){
+		for(int x=0;x<20;x++){
+			B_Blit(BPScreen1[0], x*16, y*16, (APTR)TILES_bitplane1, 0, 0, 16, 16, NULL);
+			B_Blit(BPScreen1[1], x*16, y*16, (APTR)TILES_bitplane2, 0, 0, 16, 16, NULL);
+			B_Blit(BPScreen1[2], x*16, y*16, (APTR)TILES_bitplane3, 0, 0, 16, 16, NULL);
+			B_Blit(BPScreen1[3], x*16, y*16, (APTR)TILES_bitplane4, 0, 0, 16, 16, NULL);
+		}		
+	}
+	
+	Hardware->serper = 371;
+	//S_SendString("Testing string\r\n");
 	
 	FrameLoop();
+	
+	//S_SendString("Post-FrameLoop cleanup\r\n");
 	
 	//Program is done, time to go now.
 	ReleaseSystem();
 	
 	printf("Exiting\n");
 	
-	FreeMem(Bitplane1, WIDTH*HEIGHT/8);
-	FreeMem(Bitplane2, WIDTH*HEIGHT/8);
-	FreeMem(Bitplane3, WIDTH*HEIGHT/8);
-	FreeMem(Bitplane4, WIDTH*HEIGHT/8);
-	FreeMem(Bitplane5, WIDTH*HEIGHT/8);	
+	B_FreeBobSprite(ship);
+	
+	FreeMem(BPScreen1[0], WIDTH*HEIGHT/8);
+	FreeMem(BPScreen1[1], WIDTH*HEIGHT/8);
+	FreeMem(BPScreen1[2], WIDTH*HEIGHT/8);
+	FreeMem(BPScreen1[3], WIDTH*HEIGHT/8);
+	FreeMem(BPScreen1[4], WIDTH*HEIGHT/8);		
+	
 	CloseLibrary((struct Library *)GraphicsBase);
 }

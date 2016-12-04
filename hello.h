@@ -1,8 +1,13 @@
 #define true 1
 #define false 0
 
+#define WIDTH 320
+#define HEIGHT 232
+#define DEPTH 5
+
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <exec/memory.h>
@@ -16,23 +21,28 @@
 #include <clib/exec_protos.h>
 #include <clib/graphics_protos.h>
 
+#include "serial.h"
+#include "blit.h"
 #include "copperdefs.h"
 
 #define LOWORD(l) ((WORD)(l))
 #define HIWORD(l) ((WORD)(((LONG)(l) >> 16) & 0xFFFF))
 
-PLANEPTR Bitplane1;
-PLANEPTR Bitplane2;
-PLANEPTR Bitplane3;
-PLANEPTR Bitplane4;
-PLANEPTR Bitplane5;
+PLANEPTR CopperPtr_Bitplane1;
+PLANEPTR CopperPtr_Bitplane2;
+PLANEPTR CopperPtr_Bitplane3;
+PLANEPTR CopperPtr_Bitplane4;
+PLANEPTR CopperPtr_Bitplane5;
+
+PLANEPTR BPScreen1[5];
+
+struct Bob_Sprite *ship;
 
 void AssumeDirectControl();
 void ReleaseSystem();
 int WaitForLMB();
 
-extern void WFRAME();
-extern void BlitWait();
-extern void BlitterClearScreen();
+void B_Blit32x32(PLANEPTR destination, APTR source, int x, int y);
 
-extern UBYTE SPRITE_ship[512];
+extern int ReadJoystick();
+
