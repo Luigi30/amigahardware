@@ -25,6 +25,20 @@ void B_ClearBitplane(PLANEPTR bitplane, int width, int height){
 	Hardware->bltsize = (UWORD)(bltH*64 + bltW);
 }
 
+void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int row){
+		
+	for(int i=0;i<4;i++){
+		for(int column=0;column<20;column++){		
+			int tileIndex = tileIndices[(row*20) + column];
+			//char buf[256];
+			//sprintf(buf, "Drawing tile %x at (%d,%d)\r\n", tileIndex, column, row);
+			//S_SendString(buf);
+			B_Blit(bitplanes[i], column*16, row*16, bgTileGraphics[i], (tileIndex%4)*16, (tileIndex/4)*16, 16, 16, NULL);
+		}
+
+	}
+}
+
 void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, int srcY, int sizeW, int sizeH, PLANEPTR oldBackground) {
 	int screenWidth = 320;
 	
@@ -146,26 +160,27 @@ void B_RestoreBackground(PLANEPTR destination, int destX, int destY, PLANEPTR so
 }
 
 void WaitForRMBClick() {
-	//while ((PortA->ciapra & 0x80) == 0x80) {}; //wait for click...
-	//while ((PortA->ciapra & 0x80) != 0x80) {}; //...and release.
 	while((Hardware->potinp & 0x0400) == 0x0400) {}; //wait for click...
 	while((Hardware->potinp & 0x0400) != 0x0400) {}; //...and release.
 }
 
-void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob){
-	
-	//Restore the old background
-	for(int i=0;i<bob->bitplanes;i++){	
-		//char buf[256];
-		//sprintf(buf, "Processing bitplane %d", i);
-		//S_SendString(buf);
-		
+void B_CheckBobBackground(PLANEPTR bitplanes[], struct Bob_Sprite *bob) {
+	for(int i=0;i<5;i++){
 		if(bob->background[i] != NULL){
 			B_RestoreBackground(bitplanes[i], bob->background_x, bob->background_y, bob->background[i], 0, 0, bob->width, bob->height);
 			FreeMem(bob->background[i], MAX(256, (bob->width+16)/8 * (bob->height/8)));
 			bob->background[i] = NULL;
 		}
-				
+	}
+}
+
+void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob){
+	
+	for(int i=0;i<bob->bitplanes;i++){	
+		//char buf[256];
+		//sprintf(buf, "Processing bitplane %d", i);
+		//S_SendString(buf);
+						
 		//WaitForRMBClick();
 		
 		//Save the new background

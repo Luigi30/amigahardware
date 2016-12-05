@@ -13,11 +13,6 @@
 #include "amiga.h"
 #include "serial.h"
 
-void B_ClearBitplane(PLANEPTR bitplane, int width, int height);
-void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, int srcY, int sizeW, int sizeH, PLANEPTR oldBackground);
-PLANEPTR B_SaveBackground(PLANEPTR bitplane, int x, int y, int width, int height);
-void B_RestoreBackground(PLANEPTR destination, int destX, int destY, PLANEPTR source, int srcX, int srcY, int sizeW, int sizeH);
-
 struct Bob_Sprite {
 	int position_x;
 	int position_y;
@@ -31,6 +26,12 @@ struct Bob_Sprite {
 	int background_y;
 };
 
+void B_ClearBitplane(PLANEPTR bitplane, int width, int height);
+void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, int srcY, int sizeW, int sizeH, PLANEPTR oldBackground);
+PLANEPTR B_SaveBackground(PLANEPTR bitplane, int x, int y, int width, int height);
+void B_RestoreBackground(PLANEPTR destination, int destX, int destY, PLANEPTR source, int srcX, int srcY, int sizeW, int sizeH);
+void B_CheckBobBackground(PLANEPTR bitplanes[], struct Bob_Sprite *bob);
+void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int row);
 void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob);
 struct Bob_Sprite *B_AllocateBobSprite();
 void B_FreeBobSprite(struct Bob_Sprite *bob);

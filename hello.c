@@ -8,6 +8,45 @@ struct GfxBase *GraphicsBase;
 int spriteX = 160;
 int spriteY = 100;
 
+#define SCREEN_TILE_WIDTH  20
+#define SCREEN_TILE_HEIGHT 14
+
+#define LEVEL_HEIGHT 28
+
+static UBYTE levelTileMap[] = {
+	//one screen is 14 tiles tall and 20 tiles wide
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 0
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 1
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 2
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 3
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 4
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 5
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 6
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 7
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 8
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 9
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 10
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 11
+	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 12
+	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 13
+
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 0
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 1
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 2
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 3
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 4
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 5
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 6
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 7
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 8
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 9
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 10
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 11
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 12
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 13
+	
+};
+
 void AssumeDirectControl(){
 	Forbid(); //We have exclusive control.
 	
@@ -52,19 +91,19 @@ void I_CheckJoystick(struct Bob_Sprite *bob){
 	UWORD input = Hardware->joy1dat; //right port is joystick
 	if(((input & 0x0002) == 0x0002) ^ ((input & 0x0001) == 0x0001))
 	{
-		bob->position_y++;
+		bob->position_y = bob->position_y + 2;
 	}
 	else if(((input & 0x0200) == 0x0200) ^ ((input & 0x0100) == 0x0100))
 	{
-		bob->position_y--;
+		bob->position_y = bob->position_y - 2;
 	}
 	else if(input & 0x0002)
 	{
-		bob->position_x++;
+		bob->position_x = bob->position_x + 2;
 	}
 	else if(input & 0x0200)
 	{
-		bob->position_x--;
+		bob->position_x = bob->position_x - 2;
 	}
 }
 
@@ -98,17 +137,18 @@ UWORD __chip copperList[] = {
 
 void SetupBitplanes(){
 	//Allocate bitplanes
-	BPScreen1[0] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	BPScreen1[1] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	BPScreen1[2] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	BPScreen1[3] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
-	BPScreen1[4] = AllocMem(WIDTH*HEIGHT/8, MEMF_CHIP);
+	BPScreen1[0] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
+	BPScreen1[1] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
+	BPScreen1[2] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
+	BPScreen1[3] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
+	BPScreen1[4] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
 	
-	CopperPtr_Bitplane1 = BPScreen1[0];
-	CopperPtr_Bitplane2 = BPScreen1[1];
-	CopperPtr_Bitplane3 = BPScreen1[2];
-	CopperPtr_Bitplane4 = BPScreen1[3];
-	CopperPtr_Bitplane5 = BPScreen1[4];
+	//Position the pointers at the bottom of our bitplanes.
+	CopperPtrs[0] = BPScreen1[0] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
+	CopperPtrs[1] = BPScreen1[1] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
+	CopperPtrs[2] = BPScreen1[2] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
+	CopperPtrs[3] = BPScreen1[3] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
+	CopperPtrs[4] = BPScreen1[4] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
 	
 	printf("Screen1_Bitplane0 is at %p.\n", (APTR)BPScreen1[0]);
 	printf("Screen1_Bitplane1 is at %p.\n", (APTR)BPScreen1[1]);
@@ -124,6 +164,7 @@ void FrameLoop(){
 	
 	int framecounter = 0;
 	int color = 0;
+	int tileRow = 14;
 	
 	copperList[21] = (UWORD)0x7200; //enable the 5 bitplane display
 	
@@ -133,35 +174,43 @@ void FrameLoop(){
 		WFRAME(); //we're out of the drawing area
 		framecounter++;
 		
-		//scrollYOffset++;
-		//if(scrollYOffset == 16){
-		//	scrollYOffset = 0;
-		//}
+		scrollYOffset--;
 		
-		CopperPtr_Bitplane1 = BPScreen1[0] + (scrollYOffset * 40);
-		CopperPtr_Bitplane2 = BPScreen1[1] + (scrollYOffset * 40);
-		CopperPtr_Bitplane3 = BPScreen1[2] + (scrollYOffset * 40);
-		CopperPtr_Bitplane4 = BPScreen1[3] + (scrollYOffset * 40);
-		CopperPtr_Bitplane5 = BPScreen1[4] + (scrollYOffset * 40);
+		if(scrollYOffset == -16){
+			scrollYOffset = 0;
+			tileRow--;			
+			
+			if(tileRow == 0){
+				tileRow = 14;
+			}
+		}
+		
+		//Restore the background of the Bob before we update the screen.
+		B_CheckBobBackground(CopperPtrs, ship);
+			
+		CopperPtrs[0] = BPScreen1[0] + (tileRow * 16 * 40) + (scrollYOffset * 40);
+		CopperPtrs[1] = BPScreen1[1] + (tileRow * 16 * 40) + (scrollYOffset * 40);
+		CopperPtrs[2] = BPScreen1[2] + (tileRow * 16 * 40) + (scrollYOffset * 40);
+		CopperPtrs[3] = BPScreen1[3] + (tileRow * 16 * 40) + (scrollYOffset * 40);
+		CopperPtrs[4] = BPScreen1[4] + (tileRow * 16 * 40) + (scrollYOffset * 40);			
 		
 		//Update the copper bitplane pointers
-		copperList[1] 	= HIWORD((ULONG)CopperPtr_Bitplane1);
-		copperList[3] 	= LOWORD((ULONG)CopperPtr_Bitplane1);
+		copperList[1] 	= HIWORD((ULONG)CopperPtrs[0]);
+		copperList[3] 	= LOWORD((ULONG)CopperPtrs[0]);
 		
-		copperList[5] 	= HIWORD((ULONG)CopperPtr_Bitplane2);
-		copperList[7] 	= LOWORD((ULONG)CopperPtr_Bitplane2);
+		copperList[5] 	= HIWORD((ULONG)CopperPtrs[1]);
+		copperList[7] 	= LOWORD((ULONG)CopperPtrs[1]);
 		
-		copperList[9] 	= HIWORD((ULONG)CopperPtr_Bitplane3);
-		copperList[11] 	= LOWORD((ULONG)CopperPtr_Bitplane3);
+		copperList[9] 	= HIWORD((ULONG)CopperPtrs[2]);
+		copperList[11] 	= LOWORD((ULONG)CopperPtrs[2]);
 		
-		copperList[13] 	= HIWORD((ULONG)CopperPtr_Bitplane4);
-		copperList[15] 	= LOWORD((ULONG)CopperPtr_Bitplane4);
+		copperList[13] 	= HIWORD((ULONG)CopperPtrs[3]);
+		copperList[15] 	= LOWORD((ULONG)CopperPtrs[3]);
 		
-		copperList[17] 	= HIWORD((ULONG)CopperPtr_Bitplane5);
-		copperList[19] 	= LOWORD((ULONG)CopperPtr_Bitplane5);
+		copperList[17] 	= HIWORD((ULONG)CopperPtrs[4]);
+		copperList[19] 	= LOWORD((ULONG)CopperPtrs[4]);
 		
-		B_PlaceBob(BPScreen1, ship);
-		
+		B_PlaceBob(CopperPtrs, ship);
 		I_CheckJoystick(ship); //update ship's position based on joystick
 		
 		if(framecounter == 60){
@@ -189,6 +238,12 @@ int main(){
 	AssumeDirectControl(); //Take over the system
 	
 	LoadPalette(egaColorTable, 32);
+	
+	bgTileGraphics[0] = TILES_bitplane1;
+	bgTileGraphics[1] = TILES_bitplane2;
+	bgTileGraphics[2] = TILES_bitplane3;
+	bgTileGraphics[3] = TILES_bitplane4;
+	//bgTileGraphics[4] = TILES_bitplane5;
 
 	//The system is disabled, let's do some cool stuff.
 	Hardware->cop1lc 	= (ULONG)copperList; //Enable the new copperlist
@@ -196,11 +251,11 @@ int main(){
 	Hardware->dmacon 	= 0x87C0; //enable DMA
 	Hardware->color[1]	= 0xFFF; //override color1 to white since we have 1bpp graphics
 	
-	B_ClearBitplane(BPScreen1[0], WIDTH, HEIGHT);
-	B_ClearBitplane(BPScreen1[1], WIDTH, HEIGHT);
-	B_ClearBitplane(BPScreen1[2], WIDTH, HEIGHT);
-	B_ClearBitplane(BPScreen1[3], WIDTH, HEIGHT);
-	B_ClearBitplane(BPScreen1[4], WIDTH, HEIGHT);
+	B_ClearBitplane(BPScreen1[0], WIDTH, (HEIGHT*2));
+	B_ClearBitplane(BPScreen1[1], WIDTH, (HEIGHT*2));
+	B_ClearBitplane(BPScreen1[2], WIDTH, (HEIGHT*2));
+	B_ClearBitplane(BPScreen1[3], WIDTH, (HEIGHT*2));
+	B_ClearBitplane(BPScreen1[4], WIDTH, (HEIGHT*2));
 	BlitWait();
 	
 	//Blit a tile from SPRITE_ship!
@@ -209,24 +264,17 @@ int main(){
 	ship->position_y = spriteY;
 	ship->width = 32;
 	ship->height = 32;
-	ship->bitplanes = 5;
-	ship->graphics[0] = SPRITE_ship;
-	ship->graphics[1] = SPRITE_ship;
-	ship->graphics[2] = SPRITE_ship;
-	ship->graphics[3] = SPRITE_ship;
-	ship->graphics[4] = SPRITE_ship;
-	//B_PlaceBob(BPScreen1, ship);
-	
+	ship->bitplanes = 4;
+	ship->graphics[0] = SPRITE_ship_bp0;
+	ship->graphics[1] = SPRITE_ship_bp1;
+	ship->graphics[2] = SPRITE_ship_bp2;
+	ship->graphics[3] = SPRITE_ship_bp3;
+
 	//Create the tiles in the background.
-	for(int y=0;y<14;y++){
-		for(int x=0;x<20;x++){
-			B_Blit(BPScreen1[0], x*16, y*16, (APTR)TILES_bitplane1, 0, 0, 16, 16, NULL);
-			B_Blit(BPScreen1[1], x*16, y*16, (APTR)TILES_bitplane2, 0, 0, 16, 16, NULL);
-			B_Blit(BPScreen1[2], x*16, y*16, (APTR)TILES_bitplane3, 0, 0, 16, 16, NULL);
-			B_Blit(BPScreen1[3], x*16, y*16, (APTR)TILES_bitplane4, 0, 0, 16, 16, NULL);
-		}		
+	for(int i=0;i<28;i++){
+		B_BlitTileRow(BPScreen1, levelTileMap, bgTileGraphics, i);		
 	}
-	
+
 	Hardware->serper = 371;
 	//S_SendString("Testing string\r\n");
 	
@@ -241,11 +289,11 @@ int main(){
 	
 	B_FreeBobSprite(ship);
 	
-	FreeMem(BPScreen1[0], WIDTH*HEIGHT/8);
-	FreeMem(BPScreen1[1], WIDTH*HEIGHT/8);
-	FreeMem(BPScreen1[2], WIDTH*HEIGHT/8);
-	FreeMem(BPScreen1[3], WIDTH*HEIGHT/8);
-	FreeMem(BPScreen1[4], WIDTH*HEIGHT/8);		
+	FreeMem(BPScreen1[0], WIDTH*(HEIGHT*2)/8);
+	FreeMem(BPScreen1[1], WIDTH*(HEIGHT*2)/8);
+	FreeMem(BPScreen1[2], WIDTH*(HEIGHT*2)/8);
+	FreeMem(BPScreen1[3], WIDTH*(HEIGHT*2)/8);
+	FreeMem(BPScreen1[4], WIDTH*(HEIGHT*2)/8);		
 	
 	CloseLibrary((struct Library *)GraphicsBase);
 }

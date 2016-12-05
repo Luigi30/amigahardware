@@ -28,6 +28,9 @@
 #define LOWORD(l) ((WORD)(l))
 #define HIWORD(l) ((WORD)(((LONG)(l) >> 16) & 0xFFFF))
 
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 PLANEPTR CopperPtr_Bitplane1;
 PLANEPTR CopperPtr_Bitplane2;
 PLANEPTR CopperPtr_Bitplane3;
@@ -35,6 +38,8 @@ PLANEPTR CopperPtr_Bitplane4;
 PLANEPTR CopperPtr_Bitplane5;
 
 PLANEPTR BPScreen1[5];
+PLANEPTR CopperPtrs[5];
+PLANEPTR bgTileGraphics[5];
 
 struct Bob_Sprite *ship;
 
@@ -45,4 +50,3 @@ int WaitForLMB();
 void B_Blit32x32(PLANEPTR destination, APTR source, int x, int y);
 
 extern int ReadJoystick();
-
