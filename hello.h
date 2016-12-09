@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dos/dos.h>
+#include <dos/dostags.h>
 #include <exec/memory.h>
 #include <exec/types.h>
 #include <graphics/gfxbase.h>
@@ -18,6 +20,7 @@
 #include <hardware/custom.h>
 #include <hardware/dmabits.h>
 
+#include <clib/dos_protos.h>
 #include <clib/exec_protos.h>
 #include <clib/graphics_protos.h>
 
@@ -31,13 +34,22 @@
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#define NUM_BITPLANES 4
+
 PLANEPTR CopperPtr_Bitplane1;
 PLANEPTR CopperPtr_Bitplane2;
 PLANEPTR CopperPtr_Bitplane3;
 PLANEPTR CopperPtr_Bitplane4;
 PLANEPTR CopperPtr_Bitplane5;
 
+//Double buffering!
 PLANEPTR BPScreen1[5];
+PLANEPTR BPScreen2[5];
+
+PLANEPTR ActiveScreen[5];
+PLANEPTR InactiveScreen[5];
+int screenBeingDisplayed;
+
 PLANEPTR CopperPtrs[5];
 PLANEPTR bgTileGraphics[5];
 
