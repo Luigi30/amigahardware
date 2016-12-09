@@ -10,42 +10,11 @@ int spriteY = 100;
 
 #define SCREEN_TILE_WIDTH  20
 #define SCREEN_TILE_HEIGHT 14
+#define BITPLANE_TILE_HEIGHT SCREEN_TILE_HEIGHT*2
 
-#define LEVEL_HEIGHT 28
+#define LEVEL_HEIGHT 32
 
-static UBYTE levelTileMap[] = {
-	//one screen is 14 tiles tall and 20 tiles wide
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 0
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 1
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 2
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 3
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 4
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 5
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 6
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 7
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 8
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 9
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 10
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 11
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, //Row 12
-	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, //Row 13
-
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 0
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 1
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 2
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 3
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 4
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 5
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 6
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 7
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 8
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 9
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 10
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 11
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 12
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Row 13
-	
-};
+static UBYTE *levelTileMap;
 
 void AssumeDirectControl(){
 	Forbid(); //We have exclusive control.
@@ -120,8 +89,6 @@ UWORD __chip copperList[] = {
 	C_BPL3PTL, 	0x0000,		/* BPL3PTL - bitplane pointer */
 	C_BPL4PTH, 	0x0000,		/* BPL4PTH - bitplane pointer */
 	C_BPL4PTL, 	0x0000,		/* BPL4PTL - bitplane pointer */
-	C_BPL5PTH, 	0x0000,		/* BPL5PTH - bitplane pointer */
-	C_BPL5PTL, 	0x0000,		/* BPL5PTL - bitplane pointer */	
 	C_BPLCON0,	0x0200,		/* no bitplanes, enable colorburst */
 	C_BPLCON1,	0x0000,		/* no offset */
 	C_BPL1MOD,	0x0000,		/* no modulo */
@@ -136,25 +103,15 @@ UWORD __chip copperList[] = {
 };
 
 void SetupBitplanes(){
-	//Allocate bitplanes
-	BPScreen1[0] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
-	BPScreen1[1] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
-	BPScreen1[2] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
-	BPScreen1[3] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
-	BPScreen1[4] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP);
-	
-	//Position the pointers at the bottom of our bitplanes.
-	CopperPtrs[0] = BPScreen1[0] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
-	CopperPtrs[1] = BPScreen1[1] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
-	CopperPtrs[2] = BPScreen1[2] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
-	CopperPtrs[3] = BPScreen1[3] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
-	CopperPtrs[4] = BPScreen1[4] + ((WIDTH/8) * (LEVEL_HEIGHT-SCREEN_TILE_HEIGHT));
-	
-	printf("Screen1_Bitplane0 is at %p.\n", (APTR)BPScreen1[0]);
-	printf("Screen1_Bitplane1 is at %p.\n", (APTR)BPScreen1[1]);
-	printf("Screen1_Bitplane2 is at %p.\n", (APTR)BPScreen1[2]);
-	printf("Screen1_Bitplane3 is at %p.\n", (APTR)BPScreen1[3]);
-	printf("Screen1_Bitplane4 is at %p.\n", (APTR)BPScreen1[4]);
+
+	for(int i=0; i<NUM_BITPLANES; i++){
+		//Allocate a bitplane.
+		BPScreen1[i] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP|MEMF_CLEAR);	
+		BPScreen2[i] = AllocMem(WIDTH*(HEIGHT*2)/8, MEMF_CHIP|MEMF_CLEAR);	
+		
+		//Position the copper pointer at the bottom screen (14 rows) of our bitplane.
+		CopperPtrs[i] = BPScreen1[i] + ((WIDTH/8) * (BITPLANE_TILE_HEIGHT/2));		
+	}
 }
 
 int scrollXOffset = 0;
@@ -164,9 +121,12 @@ void FrameLoop(){
 	
 	int framecounter = 0;
 	int color = 0;
-	int tileRow = 14;
+	//int rowsUntilWrap = LEVEL_HEIGHT - SCREEN_TILE_HEIGHT + 1;
+	int screenPointerRowOffset = SCREEN_TILE_HEIGHT;
 	
-	copperList[21] = (UWORD)0x7200; //enable the 5 bitplane display
+	copperList[17] = (UWORD)0x4200; //enable 4 bitplane display
+	
+	int scrollingEnabled = TRUE;
 	
 	while(!done){
 		//S_SendString("FrameLoop(): New frame\r\n");
@@ -174,27 +134,35 @@ void FrameLoop(){
 		WFRAME(); //we're out of the drawing area
 		framecounter++;
 		
-		scrollYOffset--;
+		//F_PutString(BPScreen1, 31, 220, 40, FONT_8X8, 8, 8, "pos bithc");
 		
-		if(scrollYOffset == -16){
-			scrollYOffset = 0;
-			tileRow--;			
+		if(scrollingEnabled)
+		{
+			scrollYOffset--; //one pixel per frame
 			
-			if(tileRow == 0){
-				tileRow = 14;
+			if(scrollYOffset == -16)
+			{
+				scrollYOffset = 0;
+				screenPointerRowOffset--;
+				int rowByteOffset = screenPointerRowOffset * 20;
+				
+				for(int i=0;i<NUM_BITPLANES; i++){
+					B_BlitTileRow(BPScreen1, levelTileMap, bgTileGraphics, screenPointerRowOffset);
+				}
+				
+				if(screenPointerRowOffset == 0){
+					screenPointerRowOffset = SCREEN_TILE_HEIGHT;
+				}
+			}
+			
+			for(int i=0;i<NUM_BITPLANES;i++){
+				//Update the graphics pointer for the new frame. 40 bytes per scanline.
+				CopperPtrs[i] = BPScreen1[i] + (screenPointerRowOffset * 640) + (scrollYOffset * 40);
 			}
 		}
 		
-		//Restore the background of the Bob before we update the screen.
-		B_CheckBobBackground(CopperPtrs, ship);
-			
-		CopperPtrs[0] = BPScreen1[0] + (tileRow * 16 * 40) + (scrollYOffset * 40);
-		CopperPtrs[1] = BPScreen1[1] + (tileRow * 16 * 40) + (scrollYOffset * 40);
-		CopperPtrs[2] = BPScreen1[2] + (tileRow * 16 * 40) + (scrollYOffset * 40);
-		CopperPtrs[3] = BPScreen1[3] + (tileRow * 16 * 40) + (scrollYOffset * 40);
-		CopperPtrs[4] = BPScreen1[4] + (tileRow * 16 * 40) + (scrollYOffset * 40);			
+		WaitBlit();
 		
-		//Update the copper bitplane pointers
 		copperList[1] 	= HIWORD((ULONG)CopperPtrs[0]);
 		copperList[3] 	= LOWORD((ULONG)CopperPtrs[0]);
 		
@@ -206,12 +174,6 @@ void FrameLoop(){
 		
 		copperList[13] 	= HIWORD((ULONG)CopperPtrs[3]);
 		copperList[15] 	= LOWORD((ULONG)CopperPtrs[3]);
-		
-		copperList[17] 	= HIWORD((ULONG)CopperPtrs[4]);
-		copperList[19] 	= LOWORD((ULONG)CopperPtrs[4]);
-		
-		B_PlaceBob(CopperPtrs, ship);
-		I_CheckJoystick(ship); //update ship's position based on joystick
 		
 		if(framecounter == 60){
 			//F_PutString(BPScreen1, color % 32, 40, 8, FONT_8X8, 8, 8, "Assuming direct control...");
@@ -227,35 +189,63 @@ void FrameLoop(){
 	
 }
 
+void early_abort(char *msg){
+	printf("Early abort.\n");
+	printf(msg);
+	exit(RETURN_FAIL);
+}
+
+int F_LoadLevel(char *filename) {
+	//Loads a level into levelTileMap. Returns the level's size in bytes so we can free the buffer later.
+	
+	BPTR level = Open(filename, MODE_OLDFILE);
+	struct FileInfoBlock *fib = (struct FileInfoBlock *)AllocDosObject(DOS_FIB, TAG_DONE);
+	
+	ExamineFH(level, fib);
+	levelTileMap = AllocMem(fib->fib_Size, MEMF_PUBLIC);
+	int bytesRead = Read(level, levelTileMap, fib->fib_Size);
+	
+	//Clean up
+	FreeDosObject(DOS_FIB, fib);
+	Close(level);
+	
+	return bytesRead;
+}
+
 int main(){	
 	GraphicsBase=(struct GfxBase *)OpenLibrary("graphics.library",0);
 	
-	//printf("SPRITE_ship is at %p.\n", SPRITE_ship);
-	printf("%x\n", (UWORD)(0xFFFF >> 15));
-	printf("%x\n", (UWORD)(0xFFFF << 15));
+	//Use the OS to load some files.
+	int levelSize = F_LoadLevel("level.dat");
+	if(levelSize == -1){
+		early_abort("Failed to load level!\n");
+	}
 	
+	printf("Level size is %d bytes\n", levelSize);
+	
+	if(levelSize % 20 != 0){
+		early_abort("Level length is invalid. Must be a multiple of 20 bytes.");
+	}
+
 	SetupBitplanes(); //Allocate the 5 bitplanes and insert them into the copperlist
 	AssumeDirectControl(); //Take over the system
 	
-	LoadPalette(egaColorTable, 32);
+	LoadPalette(egaColorTable, 16);
 	
 	bgTileGraphics[0] = TILES_bitplane1;
 	bgTileGraphics[1] = TILES_bitplane2;
 	bgTileGraphics[2] = TILES_bitplane3;
 	bgTileGraphics[3] = TILES_bitplane4;
-	//bgTileGraphics[4] = TILES_bitplane5;
 
 	//The system is disabled, let's do some cool stuff.
 	Hardware->cop1lc 	= (ULONG)copperList; //Enable the new copperlist
 	Hardware->copjmp1 	= 0; //Strobe to enable copperlist 1
 	Hardware->dmacon 	= 0x87C0; //enable DMA
-	Hardware->color[1]	= 0xFFF; //override color1 to white since we have 1bpp graphics
 	
 	B_ClearBitplane(BPScreen1[0], WIDTH, (HEIGHT*2));
 	B_ClearBitplane(BPScreen1[1], WIDTH, (HEIGHT*2));
 	B_ClearBitplane(BPScreen1[2], WIDTH, (HEIGHT*2));
 	B_ClearBitplane(BPScreen1[3], WIDTH, (HEIGHT*2));
-	B_ClearBitplane(BPScreen1[4], WIDTH, (HEIGHT*2));
 	BlitWait();
 	
 	//Blit a tile from SPRITE_ship!
@@ -270,13 +260,13 @@ int main(){
 	ship->graphics[2] = SPRITE_ship_bp2;
 	ship->graphics[3] = SPRITE_ship_bp3;
 
-	//Create the tiles in the background.
-	for(int i=0;i<28;i++){
-		B_BlitTileRow(BPScreen1, levelTileMap, bgTileGraphics, i);		
-	}
-
 	Hardware->serper = 371;
-	//S_SendString("Testing string\r\n");
+	
+	//Draw the background tiles.
+	//TODO: Why is there one extra tile?
+	for(int i=SCREEN_TILE_HEIGHT;i<SCREEN_TILE_HEIGHT*2;i++){
+		B_BlitTileRow(BPScreen1, levelTileMap, bgTileGraphics, i);
+	}
 	
 	FrameLoop();
 	
@@ -289,11 +279,10 @@ int main(){
 	
 	B_FreeBobSprite(ship);
 	
-	FreeMem(BPScreen1[0], WIDTH*(HEIGHT*2)/8);
-	FreeMem(BPScreen1[1], WIDTH*(HEIGHT*2)/8);
-	FreeMem(BPScreen1[2], WIDTH*(HEIGHT*2)/8);
-	FreeMem(BPScreen1[3], WIDTH*(HEIGHT*2)/8);
-	FreeMem(BPScreen1[4], WIDTH*(HEIGHT*2)/8);		
+	for(int i=0;i<NUM_BITPLANES;i++){
+		FreeMem(BPScreen1[i], WIDTH*(HEIGHT*2)/8);
+		FreeMem(BPScreen2[i], WIDTH*(HEIGHT*2)/8);
+	}
 	
 	CloseLibrary((struct Library *)GraphicsBase);
 }
