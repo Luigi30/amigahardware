@@ -24,6 +24,8 @@ struct Bob_Sprite {
 	PLANEPTR background[5]; //buffer for saved background data up to 5 bitplanes
 	int background_x; //where did this background come from?
 	int background_y;
+	
+	PLANEPTR mask;
 };
 
 void B_ClearBitplane(PLANEPTR bitplane, int width, int height);
@@ -37,11 +39,8 @@ void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob);
 struct Bob_Sprite *B_AllocateBobSprite();
 void B_FreeBobSprite(struct Bob_Sprite *bob);
 
-//void B_BlitTile(PLANEPTR destination, int destX, int destY, APTR source, UWORD tileIndex);
 void B_BlitTile_ASM(__reg("a0") PLANEPTR destination, __reg("d0") int destX, __reg("d1") int destY, __reg("a1") APTR source, __reg("d2") UWORD tileIndex);
-void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int row);
+void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int tilemapRow, int start, int end, int destinationRow);
 extern B_BlitTileRow_ASM(__reg("a0") PLANEPTR bitplanes[], __reg("a1") UBYTE tileIndices[], __reg("a2") PLANEPTR bgTileGraphics[], __reg("d0") int row);
-
-
 
 #endif

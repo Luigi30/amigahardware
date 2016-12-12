@@ -19,7 +19,10 @@ extern UBYTE SPRITE_ship_bp0[512];
 extern UBYTE SPRITE_ship_bp1[512];
 extern UBYTE SPRITE_ship_bp2[512];
 extern UBYTE SPRITE_ship_bp3[512];
-extern UBYTE SPRITE_ship_bp4[512];
+extern UBYTE SPRITE_ship_mask[512];
+
+extern UBYTE SPRITE_player[512];
+extern UBYTE SPRITE_placeholder[4];
 
 extern UBYTE TILES_bitplane1[512];
 extern UBYTE TILES_bitplane2[512];

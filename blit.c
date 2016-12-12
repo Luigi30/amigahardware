@@ -29,19 +29,18 @@ void B_ClearBitplane(PLANEPTR bitplane, int width, int height){
 	Hardware->bltsize = (UWORD)(bltH*64 + bltW);
 }
 
-void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int row){
-	int rowTilemapOffset = row*20;
-	int rowBitplaneOffset = row*32;
+void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int tilemapRow, int start, int end, int destinationRow){
+	int rowTilemapOffset = tilemapRow*20;
+	int rowBitplaneOffset = destinationRow*32;
 	
 	for(int i=0;i<4;i++){
-		for(int column=0;column<20;column++){		
+		for(int column=start;column<end;column++){		
 			int tileIndex = tileIndices[rowTilemapOffset + column];
 			//char buf[256];
 			//sprintf(buf, "Bitplane %d: Drawing tile %x at (%d,%d)\r\n", i, tileIndex, column, row);
 			//S_SendString(buf);
 			B_BlitTile_ASM(bitplanes[i], column*16, rowBitplaneOffset, bgTileGraphics[i], tileIndex);
 		}
-
 	}
 }
 
@@ -89,31 +88,6 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 	Hardware->bltdmod	= destinationSkip;
 	Hardware->bltsize	= blitsize; //execute
 }
-
-/*
-void B_BlitTile(PLANEPTR destination, int destX, int destY, APTR source, UWORD tileIndex){
-	#define TILE_BLITSIZE (16*64) + 1 //16px tall, 1 word wide
-	
-	//Assume 16x16 input.
-	destY = destY*2; //?
-	
-	Hardware->dmacon 	= 0x8040; //make sure blit DMA is enabled
-	BlitWait(); //wait for the blitter to become available
-	
-	Hardware->bltcon0	= 0x09F0; //D = A
-	Hardware->bltcon1	= 0x0000; //not using B
-	
-	Hardware->bltafwm	= 0xFFFF;
-	Hardware->bltalwm	= 0xFFFF;
-	
-	Hardware->bltapt	= (UBYTE*)source + ((tileIndex>>2) * 2) + ((tileIndex%4) * 2);
-	Hardware->bltdpt	= (APTR)(destination + (destY * SCREEN_WIDTH_WORDS) + (destX/8));
-	
-	Hardware->bltamod	= (UWORD)6;
-	Hardware->bltdmod	= (UWORD)38;
-	Hardware->bltsize	= TILE_BLITSIZE; //execute
-}
-*/
 
 PLANEPTR B_SaveBackground(PLANEPTR bitplane, int x, int y, int width, int height){
 	
@@ -191,7 +165,7 @@ void WaitForRMBClick() {
 }
 
 void B_CheckBobBackground(PLANEPTR bitplanes[], struct Bob_Sprite *bob) {
-	for(int i=0;i<5;i++){
+	for(int i=0;i<4;i++){
 		if(bob->background[i] != NULL){
 			B_RestoreBackground(bitplanes[i], bob->background_x, bob->background_y, bob->background[i], 0, 0, bob->width, bob->height);
 			FreeMem(bob->background[i], MAX(256, (bob->width+16)/8 * (bob->height/8)));
@@ -228,6 +202,7 @@ struct Bob_Sprite *B_AllocateBobSprite(){
 	buf->width = 0;
 	buf->height = 0;
 	buf->bitplanes = 0;
+	buf->mask = NULL;
 	
 	for(int i=0;i<5;i++){
 		buf->graphics[i] = NULL;
@@ -237,12 +212,16 @@ struct Bob_Sprite *B_AllocateBobSprite(){
 	return buf;
 }
 
-void B_FreeBobSprite(struct Bob_Sprite *bob){
+void B_FreeBobSprite(struct Bob_Sprite *bob){	
+	//S_SendString("B_FreeBobSprite()\r\n");
+	
 	for(int i=0;i<bob->bitplanes;i++){
 		if(bob->background[i] != NULL){
 			FreeMem(bob->background[i], MAX(256, (bob->width+16)/8 * (bob->height/8)));
 		}
 	}
 	
+	//S_SendString("Freeing bobsprite\r\n");	
 	FreeMem(bob, sizeof(struct Bob_Sprite));
+	//S_SendString("OK, bobsprite is freed\r\n");
 }

@@ -38,7 +38,7 @@ TILE_BLITSIZE = (16*64) + 1
 	lsl		#1,d2
 	add.l	d2,a1	;source += (tileIndex >> 2) * 2
 	
-	or		#$0003,d4
+	and		#$0003,d4
 	lsl		#1,d4
 	add.l	d4,a1	;source += (tileIndex % 4) * 2)
 	move.l	a1,bltapt(a6)

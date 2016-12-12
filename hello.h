@@ -2,7 +2,7 @@
 #define false 0
 
 #define WIDTH 320
-#define HEIGHT 232
+#define HEIGHT 208
 #define DEPTH 5
 
 #include <stdint.h>

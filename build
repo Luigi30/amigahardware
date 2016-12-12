@@ -1,3 +1,0 @@
-echo vc -c99 -g video.S sprite_ship.S hello.c -lamiga -lauto -o hello
-vc -c99 -g sprite_ship.S video.S hello.c -lamiga -lauto -o hello
-echo Done!
