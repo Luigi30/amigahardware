@@ -1,3 +1,6 @@
+#ifndef HELLO_H
+#define HELLO_H
+
 #define true 1
 #define false 0
 
@@ -24,9 +27,11 @@
 #include <clib/exec_protos.h>
 #include <clib/graphics_protos.h>
 
+#include "image/loader.h"
 #include "serial.h"
 #include "blit.h"
 #include "copperdefs.h"
+#include "input.h"
 
 #define LOWORD(l) ((WORD)(l))
 #define HIWORD(l) ((WORD)(((LONG)(l) >> 16) & 0xFFFF))
@@ -36,22 +41,21 @@
 
 #define NUM_BITPLANES 4
 
+struct GfxBase *GraphicsBase;
+
+struct ImageData *imageList;
+
 PLANEPTR CopperPtr_Bitplane1;
 PLANEPTR CopperPtr_Bitplane2;
 PLANEPTR CopperPtr_Bitplane3;
 PLANEPTR CopperPtr_Bitplane4;
-PLANEPTR CopperPtr_Bitplane5;
 
 //Double buffering!
-PLANEPTR BPScreen1[5];
-PLANEPTR BPScreen2[5];
-
-PLANEPTR ActiveScreen[5];
-PLANEPTR InactiveScreen[5];
-int screenBeingDisplayed;
-
+PLANEPTR BPScreen1_Interleaved;
+PLANEPTR BPStatusBar;
 PLANEPTR CopperPtrs[5];
-PLANEPTR bgTileGraphics[5];
+
+PLANEPTR tilemapBitmap;
 
 struct Bob_Sprite *ship;
 
@@ -62,3 +66,24 @@ int WaitForLMB();
 void B_Blit32x32(PLANEPTR destination, APTR source, int x, int y);
 
 extern int ReadJoystick();
+
+struct SpriteCoordinates {
+	UWORD x;
+	UWORD y;
+};
+
+struct TiledBinaryHeader {
+	UBYTE orientation;
+	UBYTE staggerAxis;
+	UBYTE staggerIndex;
+	UWORD hexSideLength;
+	UWORD mapWidth;
+	UWORD mapHeight;
+	UWORD tileWidth;
+	UWORD tileHeight;
+	UBYTE tileNumberBits;
+	UBYTE rle;
+	UWORD layerCount;
+};
+
+#endif

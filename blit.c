@@ -29,18 +29,16 @@ void B_ClearBitplane(PLANEPTR bitplane, int width, int height){
 	Hardware->bltsize = (UWORD)(bltH*64 + bltW);
 }
 
-void B_BlitTileRow(PLANEPTR bitplanes[], UBYTE tileIndices[], PLANEPTR bgTileGraphics[], int tilemapRow, int start, int end, int destinationRow){
+void B_BlitTileRow(PLANEPTR bitplanes, UBYTE tileIndices[], PLANEPTR tilemap, int tilemapRow, int start, int end, int destinationRow){
 	int rowTilemapOffset = tilemapRow*20;
 	int rowBitplaneOffset = destinationRow*32;
 	
-	for(int i=0;i<4;i++){
-		for(int column=start;column<end;column++){		
-			int tileIndex = tileIndices[rowTilemapOffset + column];
-			//char buf[256];
-			//sprintf(buf, "Bitplane %d: Drawing tile %x at (%d,%d)\r\n", i, tileIndex, column, row);
-			//S_SendString(buf);
-			B_BlitTile_ASM(bitplanes[i], column*16, rowBitplaneOffset, bgTileGraphics[i], tileIndex);
-		}
+	for(int column=start;column<end;column++){		
+		UWORD tileIndex = tileIndices[rowTilemapOffset + column];
+		//char buf[256];
+		//sprintf(buf, "Bitplane %d: Drawing tile %x at (%d,%d)\r\n", i, tileIndex, column, row);
+		//S_SendString(buf);
+		B_BlitTile_ASM(bitplanes, column*16, rowBitplaneOffset, tilemap, tileIndex);
 	}
 }
 
@@ -89,6 +87,7 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 	Hardware->bltsize	= blitsize; //execute
 }
 
+/*
 PLANEPTR B_SaveBackground(PLANEPTR bitplane, int x, int y, int width, int height){
 	
 	width = width+16; //one extra word for shifts	
@@ -159,11 +158,6 @@ void B_RestoreBackground(PLANEPTR destination, int destX, int destY, PLANEPTR so
 	
 }
 
-void WaitForRMBClick() {
-	while((Hardware->potinp & 0x0400) == 0x0400) {}; //wait for click...
-	while((Hardware->potinp & 0x0400) != 0x0400) {}; //...and release.
-}
-
 void B_CheckBobBackground(PLANEPTR bitplanes[], struct Bob_Sprite *bob) {
 	for(int i=0;i<4;i++){
 		if(bob->background[i] != NULL){
@@ -193,6 +187,14 @@ void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob){
 	bob->background_y = bob->position_y;
 	
 }
+*/
+
+void WaitForRMBClick() {
+	while((Hardware->potinp & 0x0400) == 0x0400) {}; //wait for click...
+	while((Hardware->potinp & 0x0400) != 0x0400) {}; //...and release.
+}
+
+
 
 /* bob sprites */
 struct Bob_Sprite *B_AllocateBobSprite(){
@@ -201,13 +203,10 @@ struct Bob_Sprite *B_AllocateBobSprite(){
 	buf->position_y = 0;
 	buf->width = 0;
 	buf->height = 0;
-	buf->bitplanes = 0;
+	buf->bitplaneNum = 0;
 	buf->mask = NULL;
-	
-	for(int i=0;i<5;i++){
-		buf->graphics[i] = NULL;
-		buf->background[i] = NULL;
-	}
+	buf->bitmap = NULL;
+	buf->background = NULL;
 	
 	return buf;
 }
@@ -215,10 +214,8 @@ struct Bob_Sprite *B_AllocateBobSprite(){
 void B_FreeBobSprite(struct Bob_Sprite *bob){	
 	//S_SendString("B_FreeBobSprite()\r\n");
 	
-	for(int i=0;i<bob->bitplanes;i++){
-		if(bob->background[i] != NULL){
-			FreeMem(bob->background[i], MAX(256, (bob->width+16)/8 * (bob->height/8)));
-		}
+	if(bob->background != NULL){
+		FreeMem(bob->background, MAX(256, (bob->width+16)/8 * (bob->height/8)));
 	}
 	
 	//S_SendString("Freeing bobsprite\r\n");	

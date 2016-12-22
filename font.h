@@ -160,7 +160,14 @@ void F_DrawGlyph(UBYTE *bitmap, int x, int y, uint64_t *font, int height, int wi
 	}
 }
 
-void F_PutString(PLANEPTR *bitplanes, int color, int x, int y, uint64_t *font, int height, int width, char *str){
+void F_PutString(PLANEPTR bitplane, int x, int y, uint64_t *font, int height, int width, char *str){
+	for(int i=0;i<strlen(str);i++){
+		int newX = x + (width * i);
+		F_DrawGlyph(bitplane, newX, y, font, height, width, str[i]);
+	}
+}
+
+void F_PutColorString(PLANEPTR *bitplanes, int color, int x, int y, uint64_t *font, int height, int width, char *str){
 	int bp1 = false;
 	int bp2 = false;
 	int bp3 = false;

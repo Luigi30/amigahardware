@@ -15,18 +15,21 @@ extern void WFRAME();
 extern void BlitWait();
 extern void BlitterClearScreen();
 
-extern UBYTE SPRITE_ship_bp0[512];
-extern UBYTE SPRITE_ship_bp1[512];
-extern UBYTE SPRITE_ship_bp2[512];
-extern UBYTE SPRITE_ship_bp3[512];
-extern UBYTE SPRITE_ship_mask[512];
+extern UBYTE SPRITE_ship_bp0[];
+extern UBYTE SPRITE_ship_bp1[];
+extern UBYTE SPRITE_ship_bp2[];
+extern UBYTE SPRITE_ship_bp3[];
+extern UBYTE SPRITE_ship_mask[];
 
-extern UBYTE SPRITE_player[512];
-extern UBYTE SPRITE_placeholder[4];
+extern UBYTE SPRITE_player[];
+extern UBYTE SPRITE_placeholder[];
 
-extern UBYTE TILES_bitplane1[512];
-extern UBYTE TILES_bitplane2[512];
-extern UBYTE TILES_bitplane3[512];
-extern UBYTE TILES_bitplane4[512];
+extern UBYTE TILES_bitplane1[];
+extern UBYTE TILES_bitplane2[];
+extern UBYTE TILES_bitplane3[];
+extern UBYTE TILES_bitplane4[];
+
+//extern UBYTE TILEMAP[];
+extern UWORD TILEMAP_palette[];
 
 #endif
