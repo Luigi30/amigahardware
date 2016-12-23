@@ -19,3 +19,12 @@ struct ImageData *G_FindGraphic(struct ImageData *list, char *seekName){
 		}
 	}
 }
+
+void G_FreeAllGraphics(struct ImageData *list){
+	struct ImageData *current = list;
+	while(current != NULL){
+		struct ImageData *nextNode = current->next;
+		FreeMem(current->bitmap, current->bytes);
+		current = nextNode;
+	}
+}

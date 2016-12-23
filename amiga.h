@@ -32,4 +32,8 @@ extern UBYTE TILES_bitplane4[];
 //extern UBYTE TILEMAP[];
 extern UWORD TILEMAP_palette[];
 
+static int WaitForLMB(){
+	return (PortA->ciapra & 0x40) != 0x40;
+}
+
 #endif

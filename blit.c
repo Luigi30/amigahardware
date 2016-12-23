@@ -194,8 +194,6 @@ void WaitForRMBClick() {
 	while((Hardware->potinp & 0x0400) != 0x0400) {}; //...and release.
 }
 
-
-
 /* bob sprites */
 struct Bob_Sprite *B_AllocateBobSprite(){
 	struct Bob_Sprite *buf = AllocMem(sizeof(struct Bob_Sprite), MEMF_PUBLIC);

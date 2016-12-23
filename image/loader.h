@@ -20,5 +20,6 @@ struct ImageData {
 
 void G_InitGraphics(struct ImageData **);
 struct ImageData *G_FindGraphic(struct ImageData *, char *seekName);
+void G_FreeAllGraphics(struct ImageData *list);
 
 #endif
