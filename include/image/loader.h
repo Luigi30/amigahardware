@@ -1,14 +1,14 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "string.h"
+#include <string.h>
 
 #include <exec/types.h>
 #include <exec/memory.h>
 
 #include <clib/exec_protos.h>
 
-#include "../iff.h"
+#include "iff.h"
 
 /* node for linked list of graphics */
 struct ImageData {

@@ -1,4 +1,4 @@
-#include "hello.h"
+#include "main.h"
 
 #include "colormap.h"
 #include "font.h"

@@ -1,4 +1,4 @@
-#include "sprites.h"
+#include "sprites/sprites.h"
 
 UBYTE S_PlayerTileIndex_Left(UBYTE *tilemap, struct SpriteCoordinates player, int tileSourceRow){
 	/* What tile index is the player's top left pixel on? */

@@ -1,4 +1,4 @@
-#include "loader.h"
+#include "image/loader.h"
 
 void G_InitGraphics(struct ImageData **list){
 	//first node of the linked list will always be the background tilemap
