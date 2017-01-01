@@ -19,7 +19,7 @@ extern struct Library *IFFParseBase;
 extern struct Library *DOSBase;
 
 int IFF_LoadImageFromIFF(PLANEPTR *, char *);
-extern void UnpackBits(__reg("a0") APTR src, __reg("a1") APTR dest, __reg("d2") sourceLength);
+extern void UnpackBits(__reg("a0") APTR src, __reg("a1") APTR dest, __reg("d2") sourceLength, __reg("d3") resultLength);
 
 #define ID_ILBM         MAKE_ID('I','L','B','M')
 #define ID_BMHD         MAKE_ID('B','M','H','D')

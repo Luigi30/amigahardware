@@ -8,6 +8,8 @@
 #include <graphics/gfx.h>
 #include <libraries/iffparse.h>
 
+#include "sprites/hwsprites.h"
+
 #define PLAYER_SPRITE_L_BOUND 64  /* first left graphic pixel */
 #define PLAYER_SPRITE_R_BOUND 208 /* farthest right we can be */
 

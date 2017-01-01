@@ -1,4 +1,4 @@
-#include "font.h"
+#include "gfx/font.h"
 
 void F_DrawGlyph(UBYTE *bitmap, int x, int y, uint64_t *font, int height, int width, int ascii){
 	uint64_t glyph = font[ascii];

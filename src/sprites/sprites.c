@@ -7,7 +7,7 @@ UBYTE S_PlayerTileIndex_Left(UBYTE *tilemap, struct SpriteCoordinates player, in
 	int screenY = player.y - 44; //get the background Y pixel
 	
 	//we have the screen pixel coordinate. now figure out what tile that is
-	return tilemap[(((tileSourceRow-6 + (screenY/8)) * 20) + (screenX/8))];
+	return tilemap[(((tileSourceRow-7 + (screenY/8)) * 20) + (screenX/8))];
 }
 
 UBYTE S_PlayerTileIndex_Right(UBYTE *tilemap, struct SpriteCoordinates player, int tileSourceRow){
@@ -17,7 +17,7 @@ UBYTE S_PlayerTileIndex_Right(UBYTE *tilemap, struct SpriteCoordinates player, i
 	int screenY = player.y - 44; //get the background Y pixel
 	
 	//we have the screen pixel coordinate. now figure out what tile that is
-	return tilemap[(((tileSourceRow-6 + (screenY/8)) * 20) + (screenX/8))];
+	return tilemap[(((tileSourceRow-7 + (screenY/8)) * 20) + (screenX/8))];
 }
 
 UBYTE S_TileXOffset(struct SpriteCoordinates player){
@@ -27,5 +27,5 @@ UBYTE S_TileXOffset(struct SpriteCoordinates player){
 
 UBYTE S_TileYOffset(struct SpriteCoordinates player){
 	int screenY = player.y - 44; //get the background Y pixel
-	return screenY/16;
+	return screenY/8;
 }

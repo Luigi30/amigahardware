@@ -1,7 +1,4 @@
-#include "iff.h"
-
-//TODO: figure the right solution out for this
-#define MEM_SIZE 65535
+#include "image/iff.h"
 
 /* Returns the image size in bytes. Images should be 4bpp interleaved IFF. */
 int IFF_LoadImageFromIFF(PLANEPTR *buffer, char *filename){
@@ -47,19 +44,22 @@ int IFF_LoadImageFromIFF(PLANEPTR *buffer, char *filename){
 		bmhd->nPlanes,
 		bmhd->compression);
 	int uncompressedSizeBytes = ((bmhd->w*bmhd->h)/8) * bmhd->nPlanes;
+	printf("Uncompressed size should be %d bytes.\r\n", uncompressedSizeBytes);
 	
 	//Decode the body chunk.
 	int bytesRead = 0;
 	int compressedSize = 0;
+	UWORD resultLength = 0;
 	
 	//Allocate a temporary buffer in fast RAM if available and then copy to chip mem.
 	if(bmhd->compression == 1){
 		printf("Compressed.\r\n");
 		APTR temp = AllocMem(uncompressedSizeBytes, MEMF_PUBLIC|MEMF_CLEAR);
-		if(compressedSize = ReadChunkBytes(iff, temp, uncompressedSizeBytes) > 0){
-			printf("Read %d compressed bytes.\r\n", compressedSize);
-			*buffer = AllocMem(uncompressedSizeBytes, MEMF_CHIP|MEMF_CLEAR);
-			UnpackBits(temp, &buffer, compressedSize);
+		int compressedSize = ReadChunkBytes(iff, temp, uncompressedSizeBytes);
+		if(compressedSize > 0){
+			*buffer = AllocMem(uncompressedSizeBytes, MEMF_CHIP|MEMF_CLEAR);			
+			UnpackBits(temp, *buffer, compressedSize, resultLength);
+			printf("Uncompressed %d bytes to %d bytes.\r\n", compressedSize, resultLength);
 		} else {
 			printf("Couldn't read body chunk!\r\n");
 		}

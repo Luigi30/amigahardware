@@ -1,4 +1,4 @@
-#include "blit.h"
+#include "gfx/blit.h"
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(a,b) (((a)>(b))?(a):(b))
@@ -50,14 +50,16 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 	UWORD firstwordmask = 0xFFFF >> shift;
 	UWORD lastwordmask = 0xFFFF << (16-shift);
 	
-	int bltW = sizeW/16;
+	int bltW_words = sizeW/16;
+	int bltW_bytes = sizeW/8;
 	APTR srcPointer = (APTR)((UBYTE *)source + (srcY * (sizeH/16)) + srcX/8);
 	APTR destPointer= (APTR)((destination + (destY * SCREEN_WIDTH_WORDS) + destX/8));
 	
 	//Increase blit size by 1 word to account for shifts
-	UWORD sourceSkip = (64-sizeW)/8 - 1;
-	UWORD destinationSkip = SCREEN_WIDTH_BYTES - bltW*2 - 1;	
-	UWORD blitsize = sizeH*64 + bltW + 1;
+	//UWORD sourceSkip = bltW_bytes - 2;
+	UWORD sourceSkip = 0;
+	UWORD destinationSkip = SCREEN_WIDTH_BYTES - bltW_bytes;
+	UWORD blitsize = (sizeH << 6) + bltW_words + 1;
 	
 	BlitWait(); //wait for the blitter to become available
 	
@@ -65,7 +67,7 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 	Hardware->bltcon0	= 0x0FCA | shift; //AB + /AC
 	Hardware->bltcon1	= 0x0000 | shift; //shifting the B source
 	
-	Hardware->bltadat 	= 0xFFFF; //preload with 0xFFFF for cookie cutting;
+	Hardware->bltadat 	= 0x0000; //preload with 0xFFFF for cookie cutting;
 	Hardware->bltafwm	= firstwordmask;
 	Hardware->bltalwm	= lastwordmask;
 	
@@ -83,6 +85,37 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 		Hardware->bltcmod = destinationSkip; //screen size
 	else
 		Hardware->bltcmod = 0; //we have a background, so don't skip any bytes
+	Hardware->bltdmod	= destinationSkip;
+	Hardware->bltsize	= blitsize; //execute
+}
+
+void B_BlitOverwrite(PLANEPTR destination, int destX, int destY, APTR source, int srcX, int srcY, int sizeW, int sizeH) {
+	
+	destY = destY*2; //?
+	
+	int bltW = sizeW/16;
+	APTR srcPointer = (APTR)((UBYTE *)source + (srcY * (sizeH/16)) + srcX/8);
+	APTR destPointer= (APTR)((destination + (destY * SCREEN_WIDTH_WORDS) + destX/8));
+	
+	//Increase blit size by 1 word to account for shifts
+	UWORD sourceSkip = 0;
+	UWORD destinationSkip = SCREEN_WIDTH_BYTES - bltW*2;	
+	UWORD blitsize = (sizeH << 6) + bltW;
+	
+	BlitWait(); //wait for the blitter to become available
+	
+	Hardware->dmacon 	= (UWORD)0x8040; //make sure blit DMA is enabled	
+	Hardware->bltcon0	= (UWORD)0x09F0; //D = A
+	Hardware->bltcon1	= (UWORD)0x0000;
+	
+	Hardware->bltadat 	= (UWORD)0x0000;
+	Hardware->bltafwm	= (UWORD)0xFFFF;
+	Hardware->bltalwm	= (UWORD)0xFFFF;
+	
+	Hardware->bltapt	= srcPointer;
+	Hardware->bltdpt	= destPointer;
+	
+	Hardware->bltamod	= sourceSkip;
 	Hardware->bltdmod	= destinationSkip;
 	Hardware->bltsize	= blitsize; //execute
 }
@@ -192,31 +225,4 @@ void B_PlaceBob(PLANEPTR bitplanes[], struct Bob_Sprite *bob){
 void WaitForRMBClick() {
 	while((Hardware->potinp & 0x0400) == 0x0400) {}; //wait for click...
 	while((Hardware->potinp & 0x0400) != 0x0400) {}; //...and release.
-}
-
-/* bob sprites */
-struct Bob_Sprite *B_AllocateBobSprite(){
-	struct Bob_Sprite *buf = AllocMem(sizeof(struct Bob_Sprite), MEMF_PUBLIC);
-	buf->position_x = 0;
-	buf->position_y = 0;
-	buf->width = 0;
-	buf->height = 0;
-	buf->bitplaneNum = 0;
-	buf->mask = NULL;
-	buf->bitmap = NULL;
-	buf->background = NULL;
-	
-	return buf;
-}
-
-void B_FreeBobSprite(struct Bob_Sprite *bob){	
-	//S_SendString("B_FreeBobSprite()\r\n");
-	
-	if(bob->background != NULL){
-		FreeMem(bob->background, MAX(256, (bob->width+16)/8 * (bob->height/8)));
-	}
-	
-	//S_SendString("Freeing bobsprite\r\n");	
-	FreeMem(bob, sizeof(struct Bob_Sprite));
-	//S_SendString("OK, bobsprite is freed\r\n");
 }

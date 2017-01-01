@@ -22,7 +22,6 @@ extern UBYTE SPRITE_ship_bp3[];
 extern UBYTE SPRITE_ship_mask[];
 
 extern UBYTE SPRITE_player[];
-extern UBYTE SPRITE_placeholder[];
 
 extern UBYTE TILES_bitplane1[];
 extern UBYTE TILES_bitplane2[];

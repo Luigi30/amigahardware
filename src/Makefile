@@ -1,27 +1,54 @@
+OS=$(shell uname)
+
 IDIR=../include
 
 CC=vc -DAMIGA -c99
 AS=vc -DAMIGA -c99
-CFLAGS=-g -I$(IDIR)
+CFLAGS=-I$(IDIR)
 LDFLAGS=
-ASFLAGS=-c -g -I$(IDIR)
+ASFLAGS=-c -I$(IDIR)
 
-OBJDIR=obj
+OBJDIR=../obj
 LDLIBS=-lamiga -lauto -lvc
 OUTDIR=../bin
 
-OBJECTS = blitter.o packbits.o sprite_ship.o interleaved_tiles.o video.o blit.o globals.o \
-			game/game.o font.o sprites/sprites.o image/loader.o input.o serial.o amiga.o blit.o iff.o \
-			main.o
+ifeq ($(OS),MINGW32_NT-6.2)
+$(info * Build environment is MinGW 6.2)
+LIBDIR := C:/amiga-dev/targets/m68k-amigaos/lib/
+else ifeq ($(OS),AmigaOS)
+$(info * Build environment is AmigaOS)
+LIBDIR := vlibos3:
+BINDIR := GG:/bin
+else
+	$(error Unknown environment. If Windows, check that MinGW 6.2 is installed. If Amiga, check that the GG: assign exists.)
+endif
+
+C_SRC	=	globals.c serial.c amiga.c \
+			game/game.c game/input.c \
+			gfx/blit.c gfx/bob.c gfx/font.c \
+			image/iff.c image/loader.c \
+			sprites/sprites.c \
+			main.c
+		
+ASM_SRC	= 	gfx/blitter.s gfx/palette.s gfx/video.s \
+			image/packbits.s \
+			sprites/hwsprites/explode0.s sprites/hwsprites/explode1.s
+
+OBJECTS = $(patsubst %.c, $(OBJDIR)/%.o, $(C_SRC)) $(patsubst %.s, $(OBJDIR)/%.o, $(ASM_SRC))
 			
 $(OBJDIR)/%.o: %.c
-	$(CC) $@ $< $(CFLAGS)
+	@mkdir -p $(@D)
+	$(CC) -c $< $(CFLAGS) -o $@
 	
 $(OBJDIR)/%.o: %.s
-	$(CC) $< $(ASFLAGS)
-			
-hello : $(OBJECTS)
-	vlink -o $(OUTDIR)/$@ vlibos3:startup.o $^ -Cvbcc -bamigahunk -Bstatic $(LDFLAGS) $(LDLIBS)
+	@mkdir -p $(@D)
+	$(CC) -c $< $(ASFLAGS) -o $@
 	
-clean:
-	rm -f $(ODIR)/*.o
+all : raid resource
+	
+raid : $(OBJECTS)
+	vlink -o $(OUTDIR)/$@ $(LIBDIR)startup.o $^ -Cvbcc -bamigahunk -Bstatic -L$(LIBDIR) $(LDFLAGS) $(LDLIBS)
+	
+resource :
+	cp -r ../resource/. ../bin/
+		

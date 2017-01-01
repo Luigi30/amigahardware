@@ -1,1 +1,0 @@
-I'm an Amiga program. Compile me with VBCC using the included build script. I don't do anything yet.

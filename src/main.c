@@ -1,7 +1,7 @@
 #include "main.h"
 
 #include "colormap.h"
-#include "font.h"
+#include "gfx/font.h"
 
 UWORD swapEndian(UWORD a) {
 	return ((a & 0x00FF) << 8) | ((a & 0xFF00) >> 8); 
@@ -91,8 +91,8 @@ int F_LoadTiledLevel(char *filename) {
 	printf("%s is a %d x %d map\r\n", filename, mapHeader->mapWidth, mapHeader->mapHeight);
 	
 	int tileNumber = 0;
+	printf("F_LoadTiledLevel(): Reading map %s\r\n", filename);
 	for(int row=0;row<mapHeader->mapHeight;row++){
-		printf("Reading map row %u of %u\r\n", row, mapHeader->mapHeight);
 		for(int column=0;column<mapHeader->mapWidth;column++){
 			UWORD tile;
 			Read(level, &tile, sizeof(UWORD));
@@ -109,7 +109,7 @@ int F_LoadTiledLevel(char *filename) {
 }
 
 void S_Initialize(){
-	playerCoordinates.x = 96;
+	playerCoordinates.x = 134;
 	playerCoordinates.y = 200;
 }
 
@@ -118,11 +118,8 @@ int main(){
 	
 	/* Load graphics files using the OS. */
 	G_InitGraphics(&imageList);
+	G_AddGraphic(imageList, "gfx/testbob.iff", "TESTBOB");
 	tilemapBitmap = G_FindGraphic(imageList, "BGTILES")->bitmap;
-	
-	printf("main(): imageList is %p\r\n", imageList);
-	printf("main(): bitmap is %p\r\n", imageList->bitmap);
-	printf("main(): tilemapBitmap is %p\r\n", tilemapBitmap);
 	
 	for(int i=0;i<16;i++){
 		printf("%02X", imageList->bitmap[i]);
@@ -156,24 +153,6 @@ int main(){
 	
 	S_Initialize();
 	
-	//Blit a tile from SPRITE_ship!
-	ship = B_AllocateBobSprite();
-	/*
-	ship->position_x = spriteX;
-	ship->position_y = spriteY;
-	ship->width = 32;
-	ship->height = 32;
-	ship->bitplanes = 4;
-	ship->graphics[0] = SPRITE_ship_bp0;
-	ship->graphics[1] = SPRITE_ship_bp1;
-	ship->graphics[2] = SPRITE_ship_bp2;
-	ship->graphics[3] = SPRITE_ship_bp3;
-	ship->mask = SPRITE_ship_mask;
-	for(int i=0;i<512;i++){
-		ship->mask[i] = ship->graphics[0][i] | ship->graphics[1][i] | ship->graphics[2][i] | ship->graphics[3][i];
-	}
-	*/
-	
 	//Draw the background tiles.
 	int row = 0;
 	for(int i=levelHeight-SCREEN_TILE_HEIGHT;i<levelHeight;i++){
@@ -181,14 +160,12 @@ int main(){
 		row++;
 	}
 	
-	FrameLoop();
+	GAME_Start();
 	
 	//Program is done, time to go now.
 	ReleaseSystem();
 	
 	printf("Exiting\n");
-	
-	//B_FreeBobSprite(ship);
 	
 	FreeMem(BPScreen1_Interleaved, 80000);
 	FreeMem(BPStatusBar, 1024); //until we get the right size for the status bar

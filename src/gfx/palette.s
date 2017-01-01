@@ -1,5 +1,4 @@
 	XDEF _TILEMAP_palette
-	XDEF _TILEMAP_hardcoded
 
 	SECTION data,DATA_C
 	

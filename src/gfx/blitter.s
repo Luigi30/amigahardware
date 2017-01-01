@@ -3,6 +3,7 @@
 	XREF _BlitWait
 
 	incdir	VINCLUDEOS3ASM:
+	incdir  ../include
 	include "hardware/custom.i"
 	include "macros.i"
 	

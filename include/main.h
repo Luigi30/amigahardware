@@ -25,8 +25,8 @@
 #include "image/loader.h"
 #include "sprites/sprites.h"
 #include "serial.h"
-#include "blit.h"
-#include "input.h"
+#include "gfx/blit.h"
+#include "game/input.h"
 
 struct GfxBase *GraphicsBase;
 
@@ -34,8 +34,6 @@ PLANEPTR CopperPtr_Bitplane1;
 PLANEPTR CopperPtr_Bitplane2;
 PLANEPTR CopperPtr_Bitplane3;
 PLANEPTR CopperPtr_Bitplane4;
-
-struct Bob_Sprite *ship;
 
 void AssumeDirectControl();
 void ReleaseSystem();
