@@ -119,6 +119,7 @@ int main(){
 	/* Load graphics files using the OS. */
 	G_InitGraphics(&imageList);
 	G_AddGraphic(imageList, "gfx/testbob.iff", "TESTBOB");
+	G_AddGraphic(imageList, "gfx/crash.iff", "T_CRASH");
 	tilemapBitmap = G_FindGraphic(imageList, "BGTILES")->bitmap;
 	
 	for(int i=0;i<16;i++){

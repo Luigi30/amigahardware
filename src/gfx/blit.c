@@ -48,18 +48,17 @@ void B_Blit(PLANEPTR destination, int destX, int destY, APTR source, int srcX, i
 	
 	UWORD shift = (destX % 16) << 12;
 	UWORD firstwordmask = 0xFFFF >> shift;
-	UWORD lastwordmask = 0xFFFF << (16-shift);
+	UWORD lastwordmask = 0x0000 << (16-shift);
 	
-	int bltW_words = sizeW/16;
-	int bltW_bytes = sizeW/8;
+	//Increase blit size by 1 word to account for shifts
+	int bltW_words = (sizeW/16) + 1;
+	int bltW_bytes = (sizeW/8) + 2;
 	APTR srcPointer = (APTR)((UBYTE *)source + (srcY * (sizeH/16)) + srcX/8);
 	APTR destPointer= (APTR)((destination + (destY * SCREEN_WIDTH_WORDS) + destX/8));
 	
-	//Increase blit size by 1 word to account for shifts
-	//UWORD sourceSkip = bltW_bytes - 2;
-	UWORD sourceSkip = 0;
+	UWORD sourceSkip = -1; //source is 2 words, blit is 3 words
 	UWORD destinationSkip = SCREEN_WIDTH_BYTES - bltW_bytes;
-	UWORD blitsize = (sizeH << 6) + bltW_words + 1;
+	UWORD blitsize = (sizeH << 6) + bltW_words;
 	
 	BlitWait(); //wait for the blitter to become available
 	

@@ -273,9 +273,9 @@ void GAME_PlayerLeftRiver(){
 	Hardware->color[18] = 0x0A40;
 	Hardware->color[19] = 0x0345;
 	
-	struct ImageData *testbob = G_FindGraphic(imageList, "TESTBOB");
+	struct ImageData *crash = G_FindGraphic(imageList, "T_CRASH");
 	//we don't retrieve the info from the iff yet
-	//this is a 32x32 4 bitplane image, so 32x128 interleaved
+	//this is a 192x64 4 bitplane image, so 192x256 interleaved
 	//B_BlitOverwrite(CopperPtrs[0], 0, 0, testbob->bitmap, 0, 0, 32, 32*NUM_BITPLANES);
-	B_Blit(CopperPtrs[0], 0, 0, testbob->bitmap, 0, 0, 32, 32*NUM_BITPLANES, NULL);
+	B_Blit(CopperPtrs[0], 0, 0, crash->bitmap, 0, 0, 192, 64*NUM_BITPLANES, NULL);
 }
